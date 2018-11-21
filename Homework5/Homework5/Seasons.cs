@@ -1,6 +1,6 @@
 ﻿namespace Homework5
 {
-    enum Seasons
+    public enum Seasons
     {
         Winter = 1,
         Spring = 2,
