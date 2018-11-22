@@ -11,10 +11,12 @@ namespace Homework5
         static void Main(string[] args)
         {
 
-            Livestock livestock = new Livestock();
-            livestock.AddFromConsole();
-            Seed seed = new Seed();
-            seed.AddFromConsole();
+            //Livestock livestock = new Livestock();
+            //livestock.AddFromConsole();
+            //FarmMathUtilities.AddToJson(livestock, "Livestocks.json");
+            //Seed seed = new Seed();
+            //seed.AddFromConsole();
+            //FarmMathUtilities.AddToJson(seed, "Seeds.json");
 
             Console.ReadLine();
 

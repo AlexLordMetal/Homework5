@@ -26,6 +26,9 @@ namespace Homework5
 
         #region Methods
 
+        /// <summary>
+        /// Asks for the properties of the new livestock and creates this livestock
+        /// </summary>
         public void AddFromConsole()
         {
             Console.Write("Укажите название животного: ");

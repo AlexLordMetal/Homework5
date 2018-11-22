@@ -3,24 +3,10 @@ using System.Collections.Generic;
 
 namespace Homework5
 {
-    class GardenBed
+    public class GardenBed
     {
         public int Area { get; set; }
         public List<Plant> Plants { get; set; }
-
-        public GardenBed(int area)
-        {
-            Area = area;
-            Plants = new List<Plant>();
-        }
-
-        public GardenBed()
-        {
-            Console.Write("Укажите площадь грядки: ");
-            Area = FarmMathUtilities.ConditionParse();
-            Plants = new List<Plant>();
-        }
-
         public int OccupiedArea
         {
             get
@@ -34,33 +20,66 @@ namespace Homework5
             }
         }
 
+        public GardenBed()
+        {
+            Plants = new List<Plant>();
+        }
 
-        //Methods
+        public GardenBed(int area)
+        {
+            Area = area;
+            Plants = new List<Plant>();
+        }
 
+        #region Methods
+
+        /// <summary>
+        /// Asks for the properties of the new gardenbed and creates this gardenbed
+        /// </summary>
+        public void AddFromConsole()
+        {
+            Console.Write("Укажите площадь грядки (кв.м.): ");
+            Area = FarmMathUtilities.ConditionParse();
+        }
+
+        /// <summary>
+        /// Adds plant with overflow conditions
+        /// </summary>
+        /// <param name="plant"></param>
         public void AddPlant(Plant plant)
         {
             if ((OccupiedArea + plant.Area) <= Area)
             {
                 Plants.Add(plant);
-                Console.WriteLine($"Растение \"{plant.Name}\" посажено на грядку."); 
+                Console.WriteLine($"Растение \"{plant.Name}\" посажено на грядку.");
             }
             else
             {
-                Console.WriteLine($"Растение \"{plant.Name}\" не посажено, поскольку оно уже не помещается на грядке (превышение максимального размера грядки на {OccupiedArea + plant.Area - Area} гектар)\n");
+                Console.WriteLine($"Растение \"{plant.Name}\" не посажено, поскольку оно уже не помещается на грядке (превышение максимального размера грядки на {OccupiedArea + plant.Area - Area} кв.м.)\n");
             }
         }
 
+        /// <summary>
+        /// Asks for the plant number and remove this plant
+        /// </summary>
         public void RemovePlant()
         {
-            Console.Write($"Укажите номер растения, которое хотите выкопать с грядки (всего растений - {Plants.Count}): ");
-            int plantNumber = FarmMathUtilities.ConditionParse(Plants.Count);
-            Console.WriteLine($"Животное \"{Plants[plantNumber - 1].Name}\" выкопано с грядки.\n");
-            Plants.RemoveAt(plantNumber - 1);
+            if (Plants.Count > 0)
+            {
+                Console.Write($"Укажите номер растения, которое хотите выкопать с грядки (всего растений - {Plants.Count}): ");
+                int plantNumber = FarmMathUtilities.ConditionParse(Plants.Count);
+                Console.WriteLine($"Растение \"{Plants[plantNumber - 1].Name}\" выкопано с грядки.\n");
+                Plants.RemoveAt(plantNumber - 1);
+            }
+            else Console.WriteLine($"Действие невозможно, поскольку на грядке ничего не растет\n");
         }
 
+        /// <summary>
+        /// Writes report of gardenbed to console
+        /// </summary>
         public void Report()
         {
-            Console.Write($"Площадь грядки - {Area} гектар. ");
+            Console.Write($"Площадь грядки - {Area} кв.м. ");
             if (OccupiedArea == 0)
             {
                 Console.Write("На грядке ничего не растет, ");
@@ -75,6 +94,8 @@ namespace Homework5
             }
             Console.WriteLine($"заполнено {FarmMathUtilities.OccupiedPercent(OccupiedArea, Area)}% всей площади грядки.");
         }
+
+        #endregion
 
     }
 }

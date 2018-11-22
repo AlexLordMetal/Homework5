@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Homework5
 {
@@ -26,6 +22,9 @@ namespace Homework5
 
         #region Methods
 
+        /// <summary>
+        /// Asks for the properties of the new seed and creates this seed
+        /// </summary>
         public void AddFromConsole()
         {
             Console.WriteLine("Укажите характеристики растения, от которого семена: ");

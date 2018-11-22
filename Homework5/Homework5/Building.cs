@@ -6,29 +6,15 @@ namespace Homework5
     class Building
     {
         public string Name { get; set; }
-        public int Area { get; set; }
         public int Amount { get; set; }
         public List<Livestock> Livestocks { get; set; }
-
-        public Building(string name, int area = 20, int amount = 10)
+        public int Area
         {
-            Name = name;
-            Area = area;
-            Amount = amount;
-            Livestocks = new List<Livestock>();
+            get
+            {
+                return Amount * 5;
+            }
         }
-
-        public Building()
-        {
-            Console.Write("Укажите имя строения: ");
-            Name = Console.ReadLine();
-            Console.Write($"Укажите площадь строения \"{Name}\": ");
-            Area = FarmMathUtilities.ConditionParse();
-            Console.Write($"Укажите вместимость строения \"{Name}\" (максимальное количество животных): ");
-            Amount = FarmMathUtilities.ConditionParse();
-            Livestocks = new List<Livestock>();
-        }
-
         public int OccupiedAmount
         {
             get
@@ -38,8 +24,42 @@ namespace Homework5
             }
         }
 
-        //Methods
+        public Building()
+        {
+            Livestocks = new List<Livestock>();
+        }
 
+        public Building(string name, int amount)
+        {
+            Name = name;
+            Amount = amount;
+            Livestocks = new List<Livestock>();
+        }
+
+        #region Methods
+
+        /// <summary>
+        /// Asks for the properties of the new building and creates this building
+        /// </summary>
+        public void AddFromConsole()
+        {
+            Console.Write("Укажите имя строения: ");
+            Name = Console.ReadLine();
+        }
+        //public void AddFromConsole()
+        //{
+        //    Console.Write("Укажите имя строения: ");
+        //    Name = Console.ReadLine();
+        //    Console.Write($"Укажите площадь строения \"{Name}\" (кв.м.): ");
+        //    Area = FarmMathUtilities.ConditionParse();
+        //    Console.Write($"Укажите вместимость строения \"{Name}\" (максимальное количество животных): ");
+        //    Amount = FarmMathUtilities.ConditionParse();
+        //}
+
+        /// <summary>
+        /// Adds livestock with overflow conditions
+        /// </summary>
+        /// <param name="livestock"></param>
         public void AddLivestock(Livestock livestock)
         {
             if (OccupiedAmount < Amount)
@@ -49,22 +69,32 @@ namespace Homework5
             }
             else
             {
-                Console.WriteLine($"Животное \"{livestock.Name}\" не заселено, поскольку оно уже не помещается в строение \"{Name}\" (строение уже заполнено максимально - {OccupiedAmount} животных)\n");
+                Console.WriteLine($"Животное \"{livestock.Name}\" не заселено, поскольку оно уже не помещается в строении \"{Name}\" (строение уже заполнено максимально - {OccupiedAmount} животных)\n");
             }
 
         }
 
+        /// <summary>
+        /// Asks for the livestock number and remove this livestock
+        /// </summary>
         public void RemoveLivestock()
         {
-            Console.Write($"Укажите номер животного, которое хотите выселить из строения \"{Name}\" (всего животных - {Livestocks.Count}): ");
+            if (Livestocks.Count > 0)
+            {
+                Console.Write($"Укажите номер животного, которое хотите выселить из строения \"{Name}\" (всего животных - {Livestocks.Count}): ");
             int livestockNumber = FarmMathUtilities.ConditionParse(Livestocks.Count);
-            Console.WriteLine($"Животное \"{Livestocks[livestockNumber-1].Name}\" выселено из строения \"{Name}\".\n");
+            Console.WriteLine($"Животное \"{Livestocks[livestockNumber - 1].Name}\" выселено из строения \"{Name}\".\n");
             Livestocks.RemoveAt(livestockNumber - 1);
+            }
+            else Console.WriteLine($"Действие невозможно, поскольку в строении никого нет\n");
         }
 
+        /// <summary>
+        /// Writes report of livestock to console
+        /// </summary>
         public void Report()
         {
-            Console.Write($"\"{Name}\" площадью {Area} гектар на {Amount} животных. ");
+            Console.Write($"\"{Name}\" площадью {Area} кв.м. на {Amount} животных. ");
             if (OccupiedAmount == 0)
             {
                 Console.Write("В строении никого нет, ");
@@ -79,6 +109,8 @@ namespace Homework5
             }
             Console.WriteLine($"заполнено на {FarmMathUtilities.OccupiedPercent(OccupiedAmount, Amount)}%.");
         }
+
+        #endregion
 
     }
 }

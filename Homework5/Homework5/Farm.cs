@@ -10,17 +10,7 @@ namespace Homework5
         public List<GardenBed> GardenBeds { get; set; }
         public List<Building> Buildings { get; set; }
         public Warehouse FarmWarehouse { get; set; }
-        public List<string> MyProperty { get; set; }
-
-        public Farm(string name = "Default", int area = 100)
-        {
-            Name = name;
-            Area = area;
-            GardenBeds = new List<GardenBed>();
-            Buildings = new List<Building>();
-            FarmWarehouse = new Warehouse();
-        }
-
+        public PrimaryWarehowse FarmPrimaryWarehowse { get; set; }
         public int OccupiedArea
         {
             get
@@ -38,14 +28,38 @@ namespace Homework5
             }
         }
 
-
-        //Methods
-
-        public void FarmReport()
+        public Farm()
         {
-            Console.WriteLine($"Ферма \"{Name}\" площадью {Area} гектар с {GardenBeds.Count} грядками и {Buildings.Count} строениями. Всего занято {OccupiedArea} гектар ({FarmMathUtilities.OccupiedPercent(OccupiedArea, Area)}% площади).\n");
+            GardenBeds = new List<GardenBed>();
+            Buildings = new List<Building>();
+            FarmWarehouse = new Warehouse();
+            FarmPrimaryWarehowse = new PrimaryWarehowse();
         }
 
+        public Farm(int area)
+        {
+            Area = area;
+            GardenBeds = new List<GardenBed>();
+            Buildings = new List<Building>();
+            FarmWarehouse = new Warehouse();
+            FarmPrimaryWarehowse = new PrimaryWarehowse();
+        }
+
+        #region Methods
+        #region FarmMethods
+
+        /// <summary>
+        /// Writes report of gardenbed to console
+        /// </summary>
+        public void Report()
+        {
+            Console.WriteLine($"Ферма \"{Name}\" площадью {Area} кв.м. с {GardenBeds.Count} грядками и {Buildings.Count} строениями. Всего занято {OccupiedArea} кв.м. ({FarmMathUtilities.OccupiedPercent(OccupiedArea, Area)}% площади).\n");
+        }
+
+        /// <summary>
+        /// Harvests products according to season
+        /// </summary>
+        /// <param name="season"></param>
         public void Harvest(Seasons season)
         {
             switch (season)
@@ -70,8 +84,8 @@ namespace Homework5
             {
                 foreach (var livestock in building.Livestocks)
                 {
-                    Console.WriteLine($"{livestock.Name} дал(а) {livestock.Production.Name} - {livestock.Production.Weight} килограмм.");
-                    products.Add(livestock.Production);
+                    Console.WriteLine($"{livestock.Name} дал(а) {livestock.Production.Name} - {livestock.Production.Weight} центнеров.");
+                    products.Add(new Product(livestock.Production.Name, livestock.Production.Weight, livestock.Production.Cost));
                 }
             }
             foreach (var gardenbed in GardenBeds)
@@ -80,8 +94,8 @@ namespace Homework5
                 {
                     if (plant.HarvestSeason == season)
                     {
-                        Console.WriteLine($"{plant.Name} дал(а) урожай.");
-                        products.Add(new Product(plant.Name, 1));
+                        Console.WriteLine($"{plant.Name} дал(а) урожай (1 центнер).");
+                        products.Add(new Product(plant.Name, 1, plant.Cost));
                     }
                 }
             }
@@ -295,6 +309,7 @@ namespace Homework5
             ChangeLivestockBuilding(numberFrom - 1, numberTo - 1, numberPlant - 1);
         }
 
+        #endregion
 
     }
 }

@@ -33,7 +33,7 @@ namespace Homework5
             Name = Console.ReadLine();
             Console.WriteLine($"Укажите сезон сбора растения \"{Name}\":\n1 - Зима,\n2 - Весна,\n3 - Лето,\n4 - Осень");
             HarvestSeason = (Seasons)FarmMathUtilities.ConditionParse(4);
-            Console.Write($"Укажите площадь посадки растения \"{Name}\": ");
+            Console.Write($"Укажите площадь посадки растения \"{Name}\" (кв.м.): ");
             Area = FarmMathUtilities.ConditionParse();
             Console.Write($"Укажите стоимость выращенного растения \"{Name}\": ");
             Cost = FarmMathUtilities.ConditionParse();

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Homework5
 {
@@ -10,13 +7,6 @@ namespace Homework5
     {
         public int Capacity { get; set; }
         public List<Product> Products { get; set; }
-
-        public Warehouse(int capacity = 1000)
-        {
-            Capacity = capacity;
-            Products = new List<Product>();
-        }
-
         public int OccupiedCapacity
         {
             get
@@ -30,9 +20,39 @@ namespace Homework5
             }
         }
 
+        public Warehouse(int capacity = 100)
+        {
+            Capacity = capacity;
+            Products = new List<Product>();
+        }
 
-        //Methods
+        #region Methods
 
+        /// <summary>
+        /// Writes report of warehouse to console
+        /// </summary>
+        public void Report()
+        {
+            Console.WriteLine($"Склад имеет общую вместимость {Capacity} центнеров. Заполнен на {FarmMathUtilities.OccupiedPercent(OccupiedCapacity, Capacity)}%.");
+            if (OccupiedCapacity == 0)
+            {
+                Console.WriteLine("На складе пусто.");
+            }
+            else
+            {
+                Console.WriteLine("На складе хранится:");
+                foreach (var product in Products)
+                {
+                    Console.WriteLine($"{product.Name} - {product.Weight} центнеров.");
+                }
+            }
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Adds list of products in warehouse
+        /// </summary>
+        /// <param name="newProducts"></param>
         public void WarehouseFill(List<Product> newProducts)
         {
             foreach (var newProduct in newProducts)
@@ -42,7 +62,7 @@ namespace Homework5
                     int productIndex = IndexOfProduct(Products, newProduct);
                     if (productIndex == -1)
                     {
-                        Products.Add(new Product(newProduct.Name, newProduct.Weight));      //Здесь юзается костыль
+                        Products.Add(new Product(newProduct.Name, newProduct.Weight));
                     }
                     else
                     {
@@ -56,27 +76,12 @@ namespace Homework5
             }
         }
 
-        public void Report()
-        {
-            Console.WriteLine($"Склад имеет общую вместимость {Capacity} килограмм. Заполнен на {FarmMathUtilities.OccupiedPercent(OccupiedCapacity, Capacity)}%.");
-            if (OccupiedCapacity == 0)
-            {
-                Console.WriteLine("На складе пусто.");
-            }
-            else
-            {
-                Console.WriteLine("На складе хранится:");
-                foreach (var product in Products)
-                {
-                    Console.WriteLine($"{product.Name} - {product.Weight} килограмм.");
-                }
-            }
-            Console.WriteLine();
-        }
-
-
-        //Additional method
-
+        /// <summary>
+        /// Finds index of product in list of products, if it's name is equal to the name of new product, else returns -1
+        /// </summary>
+        /// <param name="products"></param>
+        /// <param name="newProduct"></param>
+        /// <returns></returns>
         private int IndexOfProduct(List<Product> products, Product newProduct)
         {
             int productIndex = -1;
@@ -90,6 +95,8 @@ namespace Homework5
             }
             return productIndex;
         }
+
+        #endregion
 
     }
 }
