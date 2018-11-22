@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Homework5
 {
-    class PrimaryWarehowse
+    public class PrimaryWarehowse
     {
         public List<Seed> Seeds { get; set; }
         public List<Livestock> Livestocks { get; set; }

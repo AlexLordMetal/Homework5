@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Homework5
 {
@@ -77,6 +74,50 @@ namespace Homework5
                 writer.Write(JsonConvert.SerializeObject(listOfObjects));
             }
 
+        }
+
+        /// <summary>
+        /// Reads settings from ini file
+        /// </summary>
+        /// <param name="file">Filename</param>
+        public static void ReadSettings(out int area, out int capacity, out int money)
+        {
+            area = 100;
+            capacity = 100;
+            money = 1000;
+            if (File.Exists("Settings.ini"))
+            {
+                using (StreamReader reader = new StreamReader("Settings.ini"))
+                {
+                    if (Int32.TryParse(reader.ReadLine(), out int tempArea) == true && tempArea > 0)
+                    {
+                        area = tempArea;
+                    }
+                    if (Int32.TryParse(reader.ReadLine(), out int tempCapacity) == true && tempCapacity > 0)
+                    {
+                        capacity = tempCapacity;
+                    }
+                    if (Int32.TryParse(reader.ReadLine(), out int tempMoney) == true && tempMoney > 0)
+                    {
+                        money = tempMoney;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Writes new settings to ini file
+        /// </summary>
+        /// <param name="thisObject">Object to add</param>
+        /// <param name="file">Filename</param>
+        public static void WriteSettings(int area, int capacity, int money)
+        {
+            using (StreamWriter writer = new StreamWriter("Settings.ini"))
+            {
+                writer.WriteLine(area);
+                writer.WriteLine(capacity);
+                writer.WriteLine(money);
+            }
         }
 
     }

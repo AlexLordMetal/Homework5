@@ -26,7 +26,7 @@ namespace Homework5
                 Console.WriteLine("На рынке есть следующие семена:");
                 foreach (var seed in Seeds)
                 {
-                    Console.WriteLine($"{seed.ThisPlant.Name}\tСтоимость: {seed.Cost}\t(сезон посадки: {seed.PlantingSeason}, площадь посадки: {seed.ThisPlant.Area}");
+                    Console.WriteLine($"{Seeds.IndexOf(seed) + 1}. {seed.ThisPlant.Name}\tСтоимость: {seed.Cost}\t(сезон посадки: {seed.PlantingSeason}, площадь посадки: {seed.ThisPlant.Area}");
                 }
             }
             else Console.WriteLine($"На рынке нет семян на продажу.");
@@ -42,7 +42,7 @@ namespace Homework5
                 Console.WriteLine("На рынке есть следующие животные:");
                 foreach (var livestock in Livestocks)
                 {
-                    Console.WriteLine($"{livestock.Name}\tСтоимость: {livestock.Cost}\t(продукция: {livestock.Production.Name}, сезонов между сбором продукции: {livestock.TimeBetweenHarvests}");
+                    Console.WriteLine($"{Livestocks.IndexOf(livestock) + 1}. {livestock.Name}\tСтоимость: {livestock.Cost}\t(продукция: {livestock.Production.Name}, сезонов между сбором продукции: {livestock.TimeBetweenHarvests}");
                 }
             }
             else Console.WriteLine($"На рынке нет животных на продажу.");

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Homework5
 {
-    class Warehouse
+    public class Warehouse
     {
         public int Capacity { get; set; }
         public List<Product> Products { get; set; }
@@ -43,7 +43,7 @@ namespace Homework5
                 Console.WriteLine("На складе хранится:");
                 foreach (var product in Products)
                 {
-                    Console.WriteLine($"{product.Name} - {product.Weight} центнеров.");
+                    Console.WriteLine($"{Products.IndexOf(product) + 1}. {product.Name} - {product.Weight} центнеров (Стоимость центнера - {product.Cost} монет)");
                 }
             }
             Console.WriteLine();
@@ -62,7 +62,7 @@ namespace Homework5
                     int productIndex = IndexOfProduct(Products, newProduct);
                     if (productIndex == -1)
                     {
-                        Products.Add(new Product(newProduct.Name, newProduct.Weight));
+                        Products.Add(new Product(newProduct.Name, newProduct.Weight, newProduct.Cost));
                     }
                     else
                     {

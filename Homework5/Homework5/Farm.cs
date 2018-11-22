@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Homework5
 {
-    class Farm
+    public class Farm
     {
         public string Name { get; set; }
         public int Area { get; set; }
@@ -60,7 +60,7 @@ namespace Homework5
         /// Harvests products according to season
         /// </summary>
         /// <param name="season"></param>
-        public void Harvest(Seasons season)
+        public void Harvest(Seasons season)     //пока без условий isMultiple и Seasons between
         {
             switch (season)
             {
@@ -245,11 +245,11 @@ namespace Homework5
             if ((OccupiedArea + building.Area) <= Area)
             {
                 Buildings.Add(building);
-                Console.WriteLine($"Строение \"{building.Name}\" добавлено\n");
+                Console.WriteLine($"Строение \"{building.Name}\" добавлено на ферму.\n");
             }
             else
             {
-                Console.WriteLine($"Строение \"{building.Name}\" не добавлено, поскольку оно уже не помещается на ферме \"{Name}\" (превышение максимального размера фермы на {OccupiedArea + building.Area - Area} гектар)\n");
+                Console.WriteLine($"Строение площадью {building.Area} невозможно построить, поскольку оно не поместится на ферме (превышение максимального размера фермы на {OccupiedArea + building.Area - Area} кв.м.\n)");
             }
         }
 
@@ -257,7 +257,7 @@ namespace Homework5
         {
             if (number > Buildings.Count)
             {
-                Console.WriteLine($"{number} строения не существует. Действие не выполнено\n");
+                Console.WriteLine($"{number} строения не существует. Действие не выполнено.\n");
             }
             else
             {

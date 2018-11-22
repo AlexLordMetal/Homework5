@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Homework5
 {
-    class Building
+    public class Building
     {
         public string Name { get; set; }
         public int Amount { get; set; }
