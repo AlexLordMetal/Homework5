@@ -41,9 +41,9 @@ namespace Homework5
             else
             {
                 Console.WriteLine("На складе хранится:");
-                foreach (var product in Products)
+                for (int index = 0; index < Products.Count; index++)
                 {
-                    Console.WriteLine($"{Products.IndexOf(product) + 1}. {product.Name} - {product.Weight} центнеров (Стоимость центнера - {product.Cost} монет)");
+                    Console.WriteLine($"{index + 1}. {Products[index].Name} - {Products[index].Weight} центнеров (Стоимость центнера - {Products[index].Cost} монет)");
                 }
             }
             Console.WriteLine();

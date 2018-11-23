@@ -29,7 +29,7 @@ namespace Homework5
         {
             Console.WriteLine("Укажите характеристики растения, от которого семена: ");
             ThisPlant.AddFromConsole();
-            Console.WriteLine($"Укажите сезон посадки семян растения \"{ThisPlant.Name}\":\n1 - Зима,\n2 - Весна,\n3 - Лето,\n4 - Осень");
+            Console.WriteLine($"Укажите сезон ПОСАДКИ семян растения \"{ThisPlant.Name}\":\n1 - Зима\n2 - Весна\n3 - Лето\n4 - Осень");
             PlantingSeason = (Seasons)FarmMathUtilities.ConditionParse(4);
             Console.Write($"Укажите стоимость семян растения \"{ThisPlant.Name}\": ");
             Cost = FarmMathUtilities.ConditionParse();

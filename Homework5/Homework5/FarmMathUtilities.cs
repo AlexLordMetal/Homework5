@@ -44,80 +44,31 @@ namespace Homework5
         }
 
         /// <summary>
-        /// Reads the list of objects from Json file
+        /// Returns string of season in russian
         /// </summary>
-        /// <param name="file">Filename</param>
-        public static List<Object> ReadFromJson(string file)
+        /// <param name="season"></param>
+        /// <returns></returns>
+        public static string SeasonsToRusString(Seasons season)
         {
-            List<Object> listOfObjects = new List<Object>();
-            if (File.Exists(file))
+            string rusSeason = null;
+            switch (season)
             {
-                using (StreamReader reader = new StreamReader(file))
-                {
-                    listOfObjects = JsonConvert.DeserializeObject<List<Object>>(reader.ReadToEnd());
-                }
+                case Seasons.Winter:
+                    rusSeason = "Зима";
+                    break;
+                case Seasons.Spring:
+                    rusSeason = "Весна";
+                    break;
+                case Seasons.Summer:
+                    rusSeason = "Лето";
+                    break;
+                case Seasons.Autumn:
+                    rusSeason = "Осень";
+                    break;
+                default:
+                    break;
             }
-            return listOfObjects;
-        }
-
-        /// <summary>
-        /// Adds new object to Json file with list of these objects
-        /// </summary>
-        /// <param name="thisObject">Object to add</param>
-        /// <param name="file">Filename</param>
-        public static void AddToJson(Object thisObject, string file)
-        {
-            List<Object> listOfObjects = ReadFromJson(file);
-            listOfObjects.Add(thisObject);
-            using (StreamWriter writer = new StreamWriter(file))
-            {
-                writer.Write(JsonConvert.SerializeObject(listOfObjects));
-            }
-
-        }
-
-        /// <summary>
-        /// Reads settings from ini file
-        /// </summary>
-        /// <param name="file">Filename</param>
-        public static void ReadSettings(out int area, out int capacity, out int money)
-        {
-            area = 100;
-            capacity = 100;
-            money = 1000;
-            if (File.Exists("Settings.ini"))
-            {
-                using (StreamReader reader = new StreamReader("Settings.ini"))
-                {
-                    if (Int32.TryParse(reader.ReadLine(), out int tempArea) == true && tempArea > 0)
-                    {
-                        area = tempArea;
-                    }
-                    if (Int32.TryParse(reader.ReadLine(), out int tempCapacity) == true && tempCapacity > 0)
-                    {
-                        capacity = tempCapacity;
-                    }
-                    if (Int32.TryParse(reader.ReadLine(), out int tempMoney) == true && tempMoney > 0)
-                    {
-                        money = tempMoney;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Writes new settings to ini file
-        /// </summary>
-        /// <param name="thisObject">Object to add</param>
-        /// <param name="file">Filename</param>
-        public static void WriteSettings(int area, int capacity, int money)
-        {
-            using (StreamWriter writer = new StreamWriter("Settings.ini"))
-            {
-                writer.WriteLine(area);
-                writer.WriteLine(capacity);
-                writer.WriteLine(money);
-            }
+            return rusSeason;
         }
 
     }

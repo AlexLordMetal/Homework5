@@ -39,7 +39,7 @@ namespace Homework5
             Production.AddFromConsole();
             Console.Write($"Укажите количество сезонов между получением продукта \"{Production.Name}\": ");
             TimeBetweenHarvests = FarmMathUtilities.ConditionParse();
-            Console.WriteLine($"Укажите, исчезает ли животное \"{Name}\" при получении продукта, или живет дальше:\n1 - Исчезает,\n2 - Нет");
+            Console.WriteLine($"Укажите, исчезает ли животное \"{Name}\" при получении продукта, или живет дальше:\n1 - Исчезает\n2 - Нет");
             IsMultiHarvest = true;
             if (FarmMathUtilities.ConditionParse(2) == 1)
             {

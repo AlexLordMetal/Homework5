@@ -31,13 +31,13 @@ namespace Homework5
         {
             Console.Write("Укажите название растения: ");
             Name = Console.ReadLine();
-            Console.WriteLine($"Укажите сезон сбора растения \"{Name}\":\n1 - Зима,\n2 - Весна,\n3 - Лето,\n4 - Осень");
+            Console.WriteLine($"Укажите сезон СБОРА растения \"{Name}\":\n1 - Зима\n2 - Весна\n3 - Лето\n4 - Осень");
             HarvestSeason = (Seasons)FarmMathUtilities.ConditionParse(4);
             Console.Write($"Укажите площадь посадки растения \"{Name}\" (кв.м.): ");
             Area = FarmMathUtilities.ConditionParse();
             Console.Write($"Укажите стоимость выращенного растения \"{Name}\": ");
             Cost = FarmMathUtilities.ConditionParse();
-            Console.WriteLine($"Укажите, растение \"{Name}\" выкапывается при сборе или растет дальше:\n1 - Выкапывается,\n2 - Нет");
+            Console.WriteLine($"Укажите, растение \"{Name}\" выкапывается при сборе или растет дальше:\n1 - Выкапывается\n2 - Нет");
             IsMultiHarvest = true;
             if (FarmMathUtilities.ConditionParse(2) == 1)
             {

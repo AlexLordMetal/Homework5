@@ -39,22 +39,13 @@ namespace Homework5
         #region Methods
 
         /// <summary>
-        /// Asks for the properties of the new building and creates this building
+        /// Asks for the name of the new building and creates this building
         /// </summary>
         public void AddFromConsole()
         {
             Console.Write("Укажите имя строения: ");
             Name = Console.ReadLine();
         }
-        //public void AddFromConsole()
-        //{
-        //    Console.Write("Укажите имя строения: ");
-        //    Name = Console.ReadLine();
-        //    Console.Write($"Укажите площадь строения \"{Name}\" (кв.м.): ");
-        //    Area = FarmMathUtilities.ConditionParse();
-        //    Console.Write($"Укажите вместимость строения \"{Name}\" (максимальное количество животных): ");
-        //    Amount = FarmMathUtilities.ConditionParse();
-        //}
 
         /// <summary>
         /// Adds livestock with overflow conditions
@@ -108,6 +99,25 @@ namespace Homework5
                 }
             }
             Console.WriteLine($"заполнено на {FarmMathUtilities.OccupiedPercent(OccupiedAmount, Amount)}%.");
+        }
+
+        /// <summary>
+        /// Writes report of building's livestocks to console
+        /// </summary>
+        public void ReportOnlyLivestocks()
+        {
+            if (OccupiedAmount == 0)
+            {
+                Console.WriteLine("В строении никого нет.");
+            }
+            else
+            {
+                Console.WriteLine($"В строении живет:");
+                for (int index = 0; index < Livestocks.Count; index++)
+                {
+                    Console.WriteLine($"{index + 1}. {Livestocks[index].Name}");
+                }
+            }
         }
 
         #endregion

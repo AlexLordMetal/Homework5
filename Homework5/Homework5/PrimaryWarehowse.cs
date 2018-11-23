@@ -10,8 +10,8 @@ namespace Homework5
 
         public PrimaryWarehowse()
         {
-            List<Seed> Seeds = new List<Seed>();
-            List<Livestock> Livestocks = new List<Livestock>();
+            Seeds = new List<Seed>();
+            Livestocks = new List<Livestock>();
         }
 
         #region Methods
@@ -24,9 +24,9 @@ namespace Homework5
             if (Seeds.Count != 0)
             {
                 Console.WriteLine("На складе сырья есть следующие семена:");
-                foreach (var seed in Seeds)
+                for (int index = 0; index < Seeds.Count; index++)
                 {
-                    Console.WriteLine($"{seed.ThisPlant.Name}\t(сезон посадки: {seed.PlantingSeason}, площадь посадки: {seed.ThisPlant.Area}");
+                    Console.WriteLine($"{index + 1}. {Seeds[index].ThisPlant.Name}\tСтоимость: {Seeds[index].Cost}\t(сезон посадки: {FarmMathUtilities.SeasonsToRusString(Seeds[index].PlantingSeason)}, площадь посадки: {Seeds[index].ThisPlant.Area})");
                 }
             }
             else Console.WriteLine($"На складе сырья нет семян для посадки.");
@@ -40,9 +40,9 @@ namespace Homework5
             if (Livestocks.Count != 0)
             {
                 Console.WriteLine("На складе сырья есть следующие животные:");
-                foreach (var livestock in Livestocks)
+                for (int index = 0; index < Livestocks.Count; index++)
                 {
-                    Console.WriteLine($"{livestock.Name}\t(продукция: {livestock.Production.Name}, сезонов между сбором продукции: {livestock.TimeBetweenHarvests}");
+                    Console.WriteLine($"{index + 1}. {Livestocks[index].Name}\t(продукция: {Livestocks[index].Production.Name}, сезонов между сбором продукции: {Livestocks[index].TimeBetweenHarvests})");
                 }
             }
             else Console.WriteLine($"На складе сырья нет животных для заселения.");

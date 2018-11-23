@@ -45,7 +45,6 @@ namespace Homework5
             FarmPrimaryWarehowse = new PrimaryWarehowse();
         }
 
-        #region Methods
         #region FarmMethods
 
         /// <summary>
@@ -79,6 +78,7 @@ namespace Homework5
                 default:
                     break;
             }
+
             List<Product> products = new List<Product>();
             foreach (var building in Buildings)
             {
@@ -87,15 +87,29 @@ namespace Homework5
                     Console.WriteLine($"{livestock.Name} дал(а) {livestock.Production.Name} - {livestock.Production.Weight} центнеров.");
                     products.Add(new Product(livestock.Production.Name, livestock.Production.Weight, livestock.Production.Cost));
                 }
+                for (int count = 0; count < building.Livestocks.Count; count++)
+                {
+                    if (building.Livestocks[count].IsMultiHarvest == false)
+                    {
+                        building.Livestocks.RemoveAt(count);
+                        count--;
+                    }
+                }
             }
             foreach (var gardenbed in GardenBeds)
             {
-                foreach (var plant in gardenbed.Plants)
+                for (int index = 0; index < gardenbed.Plants.Count; index++)
                 {
-                    if (plant.HarvestSeason == season)
+                    if (gardenbed.Plants[index].HarvestSeason == season)
                     {
-                        Console.WriteLine($"{plant.Name} дал(а) урожай (1 центнер).");
-                        products.Add(new Product(plant.Name, 1, plant.Cost));
+                        products.Add(new Product(gardenbed.Plants[index].Name, 1, gardenbed.Plants[index].Cost));
+                        if (gardenbed.Plants[index].IsMultiHarvest == false)
+                        {
+                            Console.WriteLine($"{gardenbed.Plants[index].Name} дал(а) урожай (1 центнер) и выкопан(а) с грядки.");
+                            gardenbed.Plants.RemoveAt(index);
+                            index--;
+                        }
+                        else Console.WriteLine($"{gardenbed.Plants[index].Name} дал(а) урожай (1 центнер) и продолжает расти на грядке.");
                     }
                 }
             }
@@ -103,70 +117,69 @@ namespace Homework5
             Console.WriteLine();
         }
 
-        public void FarmManagement()
-        {
-            Console.WriteLine("Выберите действие:");
-            Console.WriteLine("1 - Добавить грядку;");
-            Console.WriteLine("2 - Убрать грядку;");
-            Console.WriteLine("3 - Добавить строение;");
-            Console.WriteLine("4 - Убрать строение;");
-            Console.WriteLine("5 - Посадить растение на грядку;");
-            Console.WriteLine("6 - Пересадить растение на другую грядку;");
-            Console.WriteLine("7 - Выкопать растение с грядки;");
-            Console.WriteLine("8 - Добавить животное в строение;");
-            Console.WriteLine("9 - Переселить животное в другое строение;");
-            Console.WriteLine("0 - Выгнать животное из строения;");
-            Console.WriteLine("Другое - ничего не делать.");
-            string choise = Console.ReadLine();
-            Console.WriteLine();
+        //public void FarmManagement()
+        //{
+        //    Console.WriteLine("Выберите действие:");
+        //    Console.WriteLine("1 - Добавить грядку;");
+        //    Console.WriteLine("2 - Убрать грядку;");
+        //    Console.WriteLine("3 - Добавить строение;");
+        //    Console.WriteLine("4 - Убрать строение;");
+        //    Console.WriteLine("5 - Посадить растение на грядку;");
+        //    Console.WriteLine("6 - Пересадить растение на другую грядку;");
+        //    Console.WriteLine("7 - Выкопать растение с грядки;");
+        //    Console.WriteLine("8 - Добавить животное в строение;");
+        //    Console.WriteLine("9 - Переселить животное в другое строение;");
+        //    Console.WriteLine("0 - Выгнать животное из строения;");
+        //    Console.WriteLine("Другое - ничего не делать.");
+        //    string choise = Console.ReadLine();
+        //    Console.WriteLine();
 
-            switch (choise)
-            {
-                case "1":
-                    AddGardenBed(new GardenBed());
-                    break;
-                case "2":
-                    Console.WriteLine($"Укажите номер убираемой грядки (всего грядок - {GardenBeds.Count}):");
-                    RemoveGardenBed(FarmMathUtilities.ConditionParse(GardenBeds.Count));
-                    break;
-                case "3":
-                    AddBuilding(new Building());
-                    break;
-                case "4":
-                    Console.WriteLine($"Укажите номер убираемого строения (всего строений - {Buildings.Count}):");
-                    RemoveBuilding(FarmMathUtilities.ConditionParse(Buildings.Count));
-                    break;
-                case "5":
-                    Plant plant = new Plant();
-                    Console.Write($"Укажите номер грядки, на которую хотите посадить растение \"{plant.Name}\" (всего грядок - {GardenBeds.Count}): ");
-                    GardenBeds[FarmMathUtilities.ConditionParse(GardenBeds.Count) - 1].AddPlant(plant);
-                    break;
-                case "6":
-                    ChangePlantGardenBed();
-                    break;
-                case "7":
-                    Console.Write($"Укажите номер грядки, c которой хотите выкопать растение (всего грядок - {GardenBeds.Count}): ");
-                    GardenBeds[FarmMathUtilities.ConditionParse(GardenBeds.Count) - 1].RemovePlant();
-                    break;
-                case "8":
-                    Livestock livestock = new Livestock();
-                    Console.Write($"Укажите номер строения, в которое хотите поселить животное \"{livestock.Name}\" (всего строений - {Buildings.Count}): ");
-                    Buildings[FarmMathUtilities.ConditionParse(Buildings.Count) - 1].AddLivestock(livestock);
-                    break;
-                case "9":
-                    ChangeLivestockBuilding();
-                    break;
-                case "0":
-                    Console.Write($"Укажите номер строения, из которого хотите выселить животное (всего строений - {Buildings.Count}): ");
-                    Buildings[FarmMathUtilities.ConditionParse(Buildings.Count) - 1].RemoveLivestock();
-                    break;
-                default:
-                    break;
-            }
-        }
+        //    switch (choise)
+        //    {
+        //        case "1":
+        //            AddGardenBed(new GardenBed());
+        //            break;
+        //        case "2":
+        //            Console.WriteLine($"Укажите номер убираемой грядки (всего грядок - {GardenBeds.Count}):");
+        //            RemoveGardenBed(FarmMathUtilities.ConditionParse(GardenBeds.Count));
+        //            break;
+        //        case "3":
+        //            AddBuilding(new Building());
+        //            break;
+        //        case "4":
+        //            Console.WriteLine($"Укажите номер убираемого строения (всего строений - {Buildings.Count}):");
+        //            RemoveBuilding(FarmMathUtilities.ConditionParse(Buildings.Count));
+        //            break;
+        //        case "5":
+        //            Plant plant = new Plant();
+        //            Console.Write($"Укажите номер грядки, на которую хотите посадить растение \"{plant.Name}\" (всего грядок - {GardenBeds.Count}): ");
+        //            GardenBeds[FarmMathUtilities.ConditionParse(GardenBeds.Count) - 1].AddPlant(plant);
+        //            break;
+        //        case "6":
+        //            ChangePlantGardenBed();
+        //            break;
+        //        case "7":
+        //            Console.Write($"Укажите номер грядки, c которой хотите выкопать растение (всего грядок - {GardenBeds.Count}): ");
+        //            GardenBeds[FarmMathUtilities.ConditionParse(GardenBeds.Count) - 1].RemovePlant();
+        //            break;
+        //        case "8":
+        //            Livestock livestock = new Livestock();
+        //            Console.Write($"Укажите номер строения, в которое хотите поселить животное \"{livestock.Name}\" (всего строений - {Buildings.Count}): ");
+        //            Buildings[FarmMathUtilities.ConditionParse(Buildings.Count) - 1].AddLivestock(livestock);
+        //            break;
+        //        case "9":
+        //            ChangeLivestockBuilding();
+        //            break;
+        //        case "0":
+        //            Console.Write($"Укажите номер строения, из которого хотите выселить животное (всего строений - {Buildings.Count}): ");
+        //            Buildings[FarmMathUtilities.ConditionParse(Buildings.Count) - 1].RemoveLivestock();
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
 
-
-        //List<GardenBed> methods
+        #region GardenBeds Methods
 
         public void AddGardenBed(GardenBed gardenbed)
         {
@@ -177,20 +190,7 @@ namespace Homework5
             }
             else
             {
-                Console.WriteLine($"{GardenBeds.Count + 1} грядка не добавлена, поскольку она уже не помещается на ферме \"{Name}\" (превышение максимального размера фермы на {OccupiedArea + gardenbed.Area - Area} гектар)\n");
-            }
-        }
-
-        private void RemoveGardenBed(int number)
-        {
-            if (number > GardenBeds.Count)
-            {
-                Console.WriteLine($"{number} грядки не существует. Действие не выполнено\n");
-            }
-            else
-            {
-                GardenBeds.RemoveAt(number - 1);
-                Console.WriteLine($"Грядка {number} убрана.\n");
+                Console.WriteLine($"{GardenBeds.Count + 1} грядка не добавлена, поскольку она уже не помещается на ферме \"{Name}\" (превышение максимального размера фермы на {OccupiedArea + gardenbed.Area - Area} кв.м.)\n");
             }
         }
 
@@ -205,38 +205,7 @@ namespace Homework5
             Console.WriteLine();
         }
 
-        public void ChangePlantGardenBed(int from, int to, int plantNumber = -1)
-        {
-            if (from != to)
-            {
-                int plantCount = GardenBeds[to].Plants.Count;
-                if (plantNumber == -1)
-                {
-                    plantNumber = GardenBeds[from].Plants.Count - 1;
-                }
-                GardenBeds[to].AddPlant(GardenBeds[from].Plants[plantNumber]);
-                if (plantCount < GardenBeds[to].Plants.Count)
-                {
-                    GardenBeds[from].Plants.RemoveAt(plantNumber);
-                }
-            }
-            else
-            {
-                Console.WriteLine("Ничего не изменилось, поскольку номера указанных грядок одинаковы\n");
-            }
-        }
-
-        public void ChangePlantGardenBed()
-        {
-            Console.Write($"Укажите номер грядки, c которой хотите пересадить растение (всего грядок - {GardenBeds.Count}): ");
-            int numberFrom = FarmMathUtilities.ConditionParse(GardenBeds.Count);
-            Console.Write($"Укажите номер растения, которое хотите пересадить (всего растений на грядке - {GardenBeds[numberFrom - 1].Plants.Count}): ");
-            int numberPlant = FarmMathUtilities.ConditionParse(GardenBeds[numberFrom - 1].Plants.Count);
-            Console.Write($"Укажите номер грядки, на которую хотите посадить растение \"{GardenBeds[numberFrom - 1].Plants[numberPlant - 1].Name}\" (всего грядок - {GardenBeds.Count}): ");
-            int numberTo = FarmMathUtilities.ConditionParse(GardenBeds.Count);
-            ChangePlantGardenBed(numberFrom - 1, numberTo - 1, numberPlant - 1);
-        }
-
+        #endregion
 
         //List<Building> methods
 
@@ -253,7 +222,7 @@ namespace Homework5
             }
         }
 
-        private void RemoveBuilding(int number)
+        public void RemoveBuilding(int number)
         {
             if (number > Buildings.Count)
             {

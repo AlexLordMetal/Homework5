@@ -10,6 +10,8 @@ namespace Homework5
     {
         static void Main(string[] args)
         {
+            FarmGame game = new FarmGame();
+            game.StartGame();
 
             //Livestock livestock = new Livestock();
             //livestock.AddFromConsole();
@@ -18,7 +20,7 @@ namespace Homework5
             //seed.AddFromConsole();
             //FarmMathUtilities.AddToJson(seed, "Seeds.json");
 
-            Console.ReadLine();
+            //Console.ReadLine();
 
             ////Creates farm, adds name and area
             //var myFarm = new Farm("Моя первая ферма", 200);

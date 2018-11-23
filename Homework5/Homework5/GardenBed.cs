@@ -66,7 +66,7 @@ namespace Homework5
         {
             if (Plants.Count > 0)
             {
-                Console.Write($"Укажите номер растения, которое хотите выкопать с грядки (всего растений - {Plants.Count}): ");
+                Console.Write($"Укажите номер растения, которое хотите выкопать с грядки, данное растение будет уничтожено (всего растений - {Plants.Count}): ");
                 int plantNumber = FarmMathUtilities.ConditionParse(Plants.Count);
                 Console.WriteLine($"Растение \"{Plants[plantNumber - 1].Name}\" выкопано с грядки.\n");
                 Plants.RemoveAt(plantNumber - 1);
@@ -93,6 +93,25 @@ namespace Homework5
                 }
             }
             Console.WriteLine($"заполнено {FarmMathUtilities.OccupiedPercent(OccupiedArea, Area)}% всей площади грядки.");
+        }
+
+        /// <summary>
+        /// Writes report of gardenbed's plants to console
+        /// </summary>
+        public void ReportOnlyPlants()
+        {
+            if (OccupiedArea == 0)
+            {
+                Console.WriteLine("На грядке ничего не растет.");
+            }
+            else
+            {
+                Console.WriteLine($"На грядке растет:");
+                for (int index = 0; index < Plants.Count; index++)
+                {
+                    Console.WriteLine($"{index + 1}. {Plants[index].Name}\t(Сезон сбора: {FarmMathUtilities.SeasonsToRusString(Plants[index].HarvestSeason)})");
+                }
+            }
         }
 
         #endregion
