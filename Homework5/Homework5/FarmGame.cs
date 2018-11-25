@@ -38,27 +38,62 @@ namespace Homework5
         }
 
         /// <summary>
-        /// Starts the game, asks for the name of the farm
+        /// Starts the game, asks for type of game (new or load)
         /// </summary>
         public void StartGame()
         {
-            ReadGameSettings(out int area, out int capacity, out int money);
-            GameFarm.Area = area;
-            GameFarm.FarmWarehouse.Capacity = capacity;
-            Money = money;
-
             if (File.Exists("Seeds.json")) GameMarket.Seeds = JsonConvert.DeserializeObject<List<Seed>>(ReadFromJson("Seeds.json"));
             else Console.WriteLine("ВНИМАНИЕ! Библиотеки семян растений не найдено. Добавьте файл \"Seeds.json\" в каталог с игрой и перезапустите игру, либо добавьте семена растений в меню настроек игры.\n");
             if (File.Exists("Livestocks.json")) GameMarket.Livestocks = JsonConvert.DeserializeObject<List<Livestock>>(ReadFromJson("Livestocks.json"));
             else Console.WriteLine("ВНИМАНИЕ! Библиотеки животных не найдено. Добавьте файл \"Livestocks.json\" в каталог с игрой и перезапустите игру, либо добавьте животных в меню настроек игры.\n");
             Console.Write("Нажмите любую клавишу для продолжения.");
             Console.ReadKey();
-
             Console.Clear();
+
+            string[] savFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sav");
+            if (savFiles.Length > 0)
+            {
+                Console.WriteLine("Сделайте выбор:\n1 - Начать новую игру\n2 - Загрузить сохранение");
+                if (FarmMathUtilities.ConditionParse(2) == 1) NewFarmGame();
+                else LoadFarmGame(savFiles);
+            }
+            else NewFarmGame();
+        }
+
+        /// <summary>
+        /// Starts new game, asks for the name of the farm
+        /// </summary>
+        public void NewFarmGame()
+        {
+            ReadGameSettings(out int area, out int capacity, out int money);
+            GameFarm.Area = area;
+            GameFarm.FarmWarehouse.Capacity = capacity;
+            Money = money;
             Console.Write("По наследству от дальнего родственника вам досталась ферма.\nДайте название вашей ферме: ");
             GameFarm.Name = Console.ReadLine();
             Console.Clear();
             Console.WriteLine($"Добро пожаловать на ферму {GameFarm.Name}!\nДля начала игры нажмите любую клавишу.");
+            Console.ReadKey();
+            FarmGameMenu();
+        }
+
+        /// <summary>
+        /// Loads FarmGame from sav file
+        /// </summary>
+        /// <param name="savFiles"></param>
+        public void LoadFarmGame(string[] savFiles)
+        {
+            Console.WriteLine("Выберите файл сохранения для загрузки:");
+            for (int i = 0; i < savFiles.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}. {savFiles[i]}");
+                string loadGameString = ReadFromJson(savFiles[FarmMathUtilities.ConditionParse(savFiles.Length) - 1]);
+                FarmGame loadGame = JsonConvert.DeserializeObject<FarmGame>(loadGameString);
+                GameFarm = loadGame.GameFarm;
+                CurrentSeason = loadGame.CurrentSeason;
+                Money = loadGame.Money;
+            }
+            Console.WriteLine("Сохранение загружено.\nДля начала игры нажмите любую клавишу.");
             Console.ReadKey();
             FarmGameMenu();
         }
@@ -122,7 +157,7 @@ namespace Homework5
                 Console.WriteLine("Выберите действие:");
                 Console.WriteLine("1 - Меню фермы");
                 Console.WriteLine("2 - Меню грядок");
-                //Console.WriteLine("3 - Меню строений");
+                Console.WriteLine("3 - Меню строений");
                 Console.WriteLine("4 - Меню склада");
                 Console.WriteLine("5 - Меню магазина");
                 Console.WriteLine("S (s) - Настройки игры");
@@ -139,9 +174,9 @@ namespace Homework5
                     case "2":
                         GardenBedsMenu();
                         break;
-                    //case "3":
-                    //    GameFarm.BuildingsReport();
-                    //    break;
+                    case "3":
+                        BuildingsMenu();
+                        break;
                     case "4":
                         WarehouseMenu();
                         break;
@@ -282,6 +317,9 @@ namespace Homework5
 
         #region GardenBeds menu methods
 
+        /// <summary>
+        /// Displays GardenBeds menu and starts the selected action
+        /// </summary>
         public void GardenBedsMenu()
         {
             GameFarm.GardenBedsReport();
@@ -343,15 +381,15 @@ namespace Homework5
                     GameFarm.FarmPrimaryWarehowse.SeedsToConsole();
                     Console.Write($"Укажите номер семян растения, которое вы хотите посадить: ");
                     int numberOfSeed = FarmMathUtilities.ConditionParse(GameFarm.FarmPrimaryWarehowse.Seeds.Count) - 1;
-                        Plant plant = new Plant(GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.Name,
-                            GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.HarvestSeason,
-                            GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.Area,
-                            GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.Cost,
-                            GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.IsMultiHarvest);
+                    Plant plant = new Plant(GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.Name,
+                        GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.HarvestSeason,
+                        GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.Area,
+                        GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.Cost,
+                        GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.IsMultiHarvest);
                     if (GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].PlantingSeason == CurrentSeason)
                     {
                         Console.Write($"Укажите номер грядки, на которую хотите посадить растение \"{plant.Name}\" (всего грядок - {GameFarm.GardenBeds.Count}): ");
-                        int numberOfGardenBed = FarmMathUtilities.ConditionParse(GameFarm.GardenBeds.Count)- 1;
+                        int numberOfGardenBed = FarmMathUtilities.ConditionParse(GameFarm.GardenBeds.Count) - 1;
                         int plantsCount = GameFarm.GardenBeds[numberOfGardenBed].Plants.Count;
                         GameFarm.GardenBeds[numberOfGardenBed].AddPlant(plant);
                         if (plantsCount != GameFarm.GardenBeds[numberOfGardenBed].Plants.Count)
@@ -402,6 +440,9 @@ namespace Homework5
 
         #region Buildings menu methods
 
+        /// <summary>
+        /// Displays Buildings menu and starts the selected action
+        /// </summary>
         public void BuildingsMenu()
         {
             GameFarm.BuildingsReport();
@@ -422,7 +463,7 @@ namespace Homework5
                     Console.ReadKey();
                     break;
                 case "2":
-                    ChangeLivestockBuilding();
+                    GameFarm.ChangeLivestockBuilding();
                     Console.WriteLine("Нажмите любую клавишу для продолжения.");
                     Console.ReadKey();
                     break;
@@ -444,55 +485,65 @@ namespace Homework5
         /// <summary>
         /// Adds livestock from market's list of livestocks
         /// </summary>
-        public void AddLivestock()  //Пока тут растения
+        public void AddLivestock()
         {
-            if (GameFarm.GardenBeds.Count > 0)
+            if (GameFarm.Buildings.Count > 0)
             {
-                if (GameFarm.FarmPrimaryWarehowse.Seeds.Count > 0)
+                GameFarm.FarmPrimaryWarehowse.LivestocksToConsole();
+                if (GameFarm.FarmPrimaryWarehowse.Livestocks.Count > 0)
                 {
-                    GameFarm.FarmPrimaryWarehowse.SeedsToConsole();
-                    Console.Write($"Укажите номер семян растения, которое вы хотите посадить: ");
-                    int numberOfSeed = FarmMathUtilities.ConditionParse(GameFarm.FarmPrimaryWarehowse.Seeds.Count) - 1;
-                    Plant plant = new Plant(GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.Name,
-                        GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.HarvestSeason,
-                        GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.Area,
-                        GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.Cost,
-                        GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].ThisPlant.IsMultiHarvest);
-                    if (GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].PlantingSeason == CurrentSeason)
+                    Console.Write($"Укажите номер животного, которое вы хотите заселить: ");
+                    int numberOfLivestock = FarmMathUtilities.ConditionParse(GameFarm.FarmPrimaryWarehowse.Livestocks.Count) - 1;
+                    Product production = new Product(GameFarm.FarmPrimaryWarehowse.Livestocks[numberOfLivestock].Production.Name,
+                        GameFarm.FarmPrimaryWarehowse.Livestocks[numberOfLivestock].Production.Weight,
+                        GameFarm.FarmPrimaryWarehowse.Livestocks[numberOfLivestock].Production.Cost);
+                    Livestock livestock = new Livestock(GameFarm.FarmPrimaryWarehowse.Livestocks[numberOfLivestock].Name,
+                        GameFarm.FarmPrimaryWarehowse.Livestocks[numberOfLivestock].Cost,
+                        production,
+                        GameFarm.FarmPrimaryWarehowse.Livestocks[numberOfLivestock].TimeBetweenHarvests,
+                        GameFarm.FarmPrimaryWarehowse.Livestocks[numberOfLivestock].IsMultiHarvest);
+                    Console.Write($"Укажите номер строения, в которое хотите поселить животное \"{livestock.Name}\" (всего строений - {GameFarm.Buildings.Count}): ");
+                    int numberOfBuilding = FarmMathUtilities.ConditionParse(GameFarm.Buildings.Count) - 1;
+                    int livestocksCount = GameFarm.Buildings[numberOfBuilding].Livestocks.Count;
+                    GameFarm.Buildings[numberOfBuilding].AddLivestock(livestock);
+                    if (livestocksCount != GameFarm.Buildings[numberOfBuilding].Livestocks.Count)
                     {
-                        Console.Write($"Укажите номер грядки, на которую хотите посадить растение \"{plant.Name}\" (всего грядок - {GameFarm.GardenBeds.Count}): ");
-                        int numberOfGardenBed = FarmMathUtilities.ConditionParse(GameFarm.GardenBeds.Count) - 1;
-                        int plantsCount = GameFarm.GardenBeds[numberOfGardenBed].Plants.Count;
-                        GameFarm.GardenBeds[numberOfGardenBed].AddPlant(plant);
-                        if (plantsCount != GameFarm.GardenBeds[numberOfGardenBed].Plants.Count)
-                        {
-                            GameFarm.FarmPrimaryWarehowse.Seeds.RemoveAt(numberOfSeed);
-                        }
+                        GameFarm.FarmPrimaryWarehowse.Livestocks.RemoveAt(numberOfLivestock);
                     }
-                    else Console.WriteLine($"Семена растения {plant.Name} нельзя посадить сейчас, так как их сезон посадки " +
-                        $"(\"{FarmMathUtilities.SeasonsToRusString(GameFarm.FarmPrimaryWarehowse.Seeds[numberOfSeed].PlantingSeason)}\") не соответствует текущему сезону" +
-                        $"(\"{FarmMathUtilities.SeasonsToRusString(CurrentSeason)}\").\n");
                 }
-                else GameFarm.FarmPrimaryWarehowse.SeedsToConsole();
             }
-            else Console.WriteLine("На ферме нет ни одной грядки.\n");
+            else Console.WriteLine("На ферме нет ни одного строения.\n");
         }
 
-        //переселение метод
+        /// <summary>
+        /// Removes livestock from one chosen building and adds it to another chosen building
+        /// </summary>
+        public void ChangeLivestockBuilding()
+        {
+            if (GameFarm.Buildings.Count > 1)
+            {
+
+            }
+            else if (GameFarm.Buildings.Count > 0) Console.WriteLine("Переселение невозможно, так как на ферме всего одно строение.\n");
+            else Console.WriteLine("На ферме нет ни одного строения.\n");
+        }
 
         /// <summary>
         /// Removes livestock from chosen building to primary warehouse
         /// </summary>
-        public void RemoveLivestock() //Пока тут растения
+        public void RemoveLivestock()
         {
-            if (GameFarm.GardenBeds.Count > 0)
+            if (GameFarm.Buildings.Count > 0)
             {
-                Console.WriteLine($"Укажите номер грядки, c которой хотите выкопать растение (всего грядок - {GameFarm.GardenBeds.Count}): ");
-                int indexOfGardenBed = FarmMathUtilities.ConditionParse(GameFarm.GardenBeds.Count) - 1;
-                GameFarm.GardenBeds[indexOfGardenBed].ReportOnlyPlants();
-                GameFarm.GardenBeds[indexOfGardenBed].RemovePlant();
+                Console.WriteLine($"Укажите номер строения, из которого хотите выселить животное (всего строений - {GameFarm.Buildings.Count}): ");
+                int indexOfBuilding = FarmMathUtilities.ConditionParse(GameFarm.Buildings.Count) - 1;
+                GameFarm.Buildings[indexOfBuilding].ReportOnlyLivestocks();
+                if (GameFarm.Buildings[indexOfBuilding].Livestocks.Count > 0)
+                {
+                    GameMarket.Livestocks.Add(GameFarm.Buildings[indexOfBuilding].RemoveLivestock());
+                }
             }
-            else Console.WriteLine("На ферме нет ни одной грядки.\n");
+            else Console.WriteLine("На ферме нет ни одного строения.\n");
         }
 
         /// <summary>
@@ -671,7 +722,7 @@ namespace Homework5
             Console.WriteLine("1 - Добавить семена растения в библиотеку игры");
             Console.WriteLine("2 - Добавить животное в библиотеку игры");
             Console.WriteLine("3 - Изменить стартовые параметры игры (площадь фермы, вместимость склада, количество монет)");
-            //Console.WriteLine("4 - Сохранить игру");
+            Console.WriteLine("4 - Сохранить игру");
             Console.WriteLine("Другое - В главное меню");
             string userChoise = Console.ReadLine();
             Console.WriteLine();
@@ -693,11 +744,11 @@ namespace Homework5
                     Console.WriteLine("Нажмите любую клавишу для продолжения.");
                     Console.ReadKey();
                     break;
-                //case "4":
-                //    SaveFarmGame();
-                //    Console.WriteLine($"Игра сохранена. Нажмите любую клавишу для продолжения.");
-                //    Console.ReadKey();
-                //    break;
+                case "4":
+                    SaveFarmGame();
+                    Console.WriteLine($"Игра сохранена. Нажмите любую клавишу для продолжения.");
+                    Console.ReadKey();
+                    break;
                 default:
                     break;
             }
@@ -731,6 +782,19 @@ namespace Homework5
                 writer.WriteLine(area);
                 writer.WriteLine(capacity);
                 writer.WriteLine(money);
+            }
+        }
+
+        /// <summary>
+        /// Saves FarmGame to chosen sav file
+        /// </summary>
+        public void SaveFarmGame()
+        {
+            Console.Write("Введите имя файла сохранения: ");
+            string saveName = Console.ReadLine() + ".sav";
+            using (StreamWriter writer = new StreamWriter(saveName))
+            {
+                writer.Write(JsonConvert.SerializeObject(this));
             }
         }
 

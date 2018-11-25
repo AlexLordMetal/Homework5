@@ -9,10 +9,12 @@ namespace Homework5
         public Product Production { get; set; }
         public int TimeBetweenHarvests { get; set; }
         public bool IsMultiHarvest { get; set; }
+        public int HarvestTime { get; set; }
         
         public Livestock()
         {
             Production = new Product();
+            HarvestTime = 0;
         }
 
         public Livestock(string name, int cost, Product production, int timeBetweenHarvests, bool isMultiHarvest = true)
@@ -22,6 +24,7 @@ namespace Homework5
             Production = production;
             TimeBetweenHarvests = timeBetweenHarvests;
             IsMultiHarvest = isMultiHarvest;
+            HarvestTime = 0;
         }
 
         #region Methods

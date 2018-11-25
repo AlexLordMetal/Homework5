@@ -68,16 +68,19 @@ namespace Homework5
         /// <summary>
         /// Asks for the livestock number and remove this livestock
         /// </summary>
-        public void RemoveLivestock()
+        public Livestock RemoveLivestock()
         {
+            Livestock livestock = new Livestock();
             if (Livestocks.Count > 0)
             {
                 Console.Write($"Укажите номер животного, которое хотите выселить из строения \"{Name}\" (всего животных - {Livestocks.Count}): ");
-            int livestockNumber = FarmMathUtilities.ConditionParse(Livestocks.Count);
-            Console.WriteLine($"Животное \"{Livestocks[livestockNumber - 1].Name}\" выселено из строения \"{Name}\".\n");
-            Livestocks.RemoveAt(livestockNumber - 1);
+                int livestockNumber = FarmMathUtilities.ConditionParse(Livestocks.Count) - 1;
+                livestock = Livestocks[livestockNumber];
+                Livestocks.RemoveAt(livestockNumber);
+                Console.WriteLine($"Животное \"{livestock.Name}\" выселено из строения \"{Name}\".\n");
             }
             else Console.WriteLine($"Действие невозможно, поскольку в строении никого нет\n");
+            return livestock;
         }
 
         /// <summary>
