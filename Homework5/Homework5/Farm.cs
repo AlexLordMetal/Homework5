@@ -59,7 +59,7 @@ namespace Homework5
         /// Harvests products according to season
         /// </summary>
         /// <param name="season"></param>
-        public void Harvest(Seasons season)
+        public void Harvest(Seasons season, string bonusName)
         {
             switch (season)
             {
@@ -84,18 +84,20 @@ namespace Homework5
             {
                 for (int index = 0; index < building.Livestocks.Count; index++)
                 {
+                    int bonusKoef = 1;
                     building.Livestocks[index].HarvestTime++;
                     if (building.Livestocks[index].HarvestTime == building.Livestocks[index].TimeBetweenHarvests)
                     {
+                        if (bonusName == building.Livestocks[index].Name) bonusKoef = 2;
                         building.Livestocks[index].HarvestTime = 0;
-                        products.Add(new Product(building.Livestocks[index].Production.Name, building.Livestocks[index].Production.Weight, building.Livestocks[index].Production.Cost));
+                        products.Add(new Product(building.Livestocks[index].Production.Name, bonusKoef * building.Livestocks[index].Production.Weight, building.Livestocks[index].Production.Cost));
                         if (building.Livestocks[index].IsMultiHarvest == false)
                         {
-                            Console.WriteLine($"{building.Livestocks[index].Name} дал(а) {building.Livestocks[index].Production.Name} - {building.Livestocks[index].Production.Weight} центнеров и пал(а).");
+                            Console.WriteLine($"{building.Livestocks[index].Name} дал(а) {building.Livestocks[index].Production.Name} - {bonusKoef * building.Livestocks[index].Production.Weight} центнеров и пал(а).");
                             building.Livestocks.RemoveAt(index);
                             index--;
                         }
-                        else Console.WriteLine($"{building.Livestocks[index].Name} дал(а) {building.Livestocks[index].Production.Name} - {building.Livestocks[index].Production.Weight} центнеров и продолжает жить в здании {building.Name}.");
+                        else Console.WriteLine($"{building.Livestocks[index].Name} дал(а) {building.Livestocks[index].Production.Name} - {bonusKoef * building.Livestocks[index].Production.Weight} центнеров и продолжает жить в здании {building.Name}.");
                     }
                 }
             }
@@ -103,16 +105,18 @@ namespace Homework5
             {
                 for (int index = 0; index < gardenbed.Plants.Count; index++)
                 {
+                    int bonusKoef = 1;
                     if (gardenbed.Plants[index].HarvestSeason == season)
                     {
-                        products.Add(new Product(gardenbed.Plants[index].Name, 1, gardenbed.Plants[index].Cost));
+                        if (bonusName == gardenbed.Plants[index].Name) bonusKoef = 2;
+                        products.Add(new Product(gardenbed.Plants[index].Name, bonusKoef, gardenbed.Plants[index].Cost));
                         if (gardenbed.Plants[index].IsMultiHarvest == false)
                         {
-                            Console.WriteLine($"{gardenbed.Plants[index].Name} дал(а) урожай (1 центнер) и выкопан(а) с грядки.");
+                            Console.WriteLine($"{gardenbed.Plants[index].Name} дал(а) урожай {bonusKoef} центнер(а) и выкопан(а) с грядки.");
                             gardenbed.Plants.RemoveAt(index);
                             index--;
                         }
-                        else Console.WriteLine($"{gardenbed.Plants[index].Name} дал(а) урожай (1 центнер) и продолжает расти на грядке.");
+                        else Console.WriteLine($"{gardenbed.Plants[index].Name} дал(а) урожай {bonusKoef} центнер(а) и продолжает расти на грядке.");
                     }
                 }
             }
